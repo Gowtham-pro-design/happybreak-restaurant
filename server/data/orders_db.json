@@ -1,0 +1,63 @@
+[
+  {
+    "orderId": "HB-1025",
+    "createdAt": "2026-09-06T14:09:17.866Z",
+    "orderType": "takeaway",
+    "tableNumber": null,
+    "customerName": "John Miller",
+    "customerPhone": "(555) 234-5678",
+    "items": [
+      {
+        "id": "brg-1",
+        "name": "Happybreak Prime Angus Burger",
+        "price": 16.99,
+        "quantity": 1
+      },
+      {
+        "id": "drk-1",
+        "name": "Fresh House Citrus Mint Lemonade",
+        "price": 4.99,
+        "quantity": 2
+      }
+    ],
+    "subtotal": 26.97,
+    "taxRate": 0.08875,
+    "tax": 2.39,
+    "total": 29.36,
+    "orderStatus": "CANCELLED",
+    "paymentStatus": "PAY_AT_RESTAURANT",
+    "paymentMethod": "pay_at_restaurant",
+    "notes": "Pickup at 7:30 PM",
+    "updatedAt": "2026-09-06T14:41:31.329Z"
+  },
+  {
+    "orderId": "HB-1024",
+    "createdAt": "2026-09-06T13:54:17.863Z",
+    "orderType": "dine-in",
+    "tableNumber": "12",
+    "customerName": "Sarah Jenkins",
+    "customerPhone": "",
+    "items": [
+      {
+        "id": "sal-1",
+        "name": "Classic Caesar Salad",
+        "price": 12.99,
+        "quantity": 2
+      },
+      {
+        "id": "sal-2",
+        "name": "Mediterranean Greek Bowl",
+        "price": 14.49,
+        "quantity": 1
+      }
+    ],
+    "subtotal": 40.47,
+    "taxRate": 0.08875,
+    "tax": 3.59,
+    "total": 44.06,
+    "orderStatus": "PREPARING",
+    "paymentStatus": "PAID",
+    "paymentMethod": "stripe_online",
+    "notes": "Extra dressing on the side please."
+  }
+]
