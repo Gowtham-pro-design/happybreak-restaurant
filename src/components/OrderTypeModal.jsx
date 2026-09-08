@@ -44,60 +44,42 @@ export default function OrderTypeModal({
 
   return (
     <div className="modal-overlay fade-in">
-      <div className="modal-content" style={{ maxWidth: '520px' }}>
+      <div className="modal-content order-type-modal-content">
         <div className="modal-header">
           <div className="modal-title">Select Order Type</div>
           <button className="close-btn" onClick={onClose}><X size={20} /></button>
         </div>
 
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
-          Please choose how you would like to receive your food order today:
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: '1.25rem', lineHeight: '1.4' }}>
+          Choose how you would like to receive your food order today:
         </p>
 
         {/* Order Type Selection Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
+        <div className="order-type-cards-grid">
           {/* Dine-In Selection Card */}
           <div
             onClick={() => setOrderType('dine-in')}
-            style={{
-              padding: '1.25rem',
-              borderRadius: 'var(--radius-lg)',
-              background: orderType === 'dine-in' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-              border: orderType === 'dine-in' ? '2px solid #10b981' : '1px solid rgba(255, 255, 255, 0.1)',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              textAlign: 'center',
-              position: 'relative'
-            }}
+            className={`order-type-card ${orderType === 'dine-in' ? 'active-dine-in' : ''}`}
           >
             {orderType === 'dine-in' && (
-              <CheckCircle size={18} style={{ position: 'absolute', top: '10px', right: '10px', color: '#10b981' }} />
+              <CheckCircle size={18} className="order-type-check-icon" style={{ color: '#10b981' }} />
             )}
-            <Utensils size={32} style={{ color: orderType === 'dine-in' ? '#10b981' : 'var(--text-muted)', margin: '0 auto 10px' }} />
-            <h4 style={{ fontSize: '1.1rem', marginBottom: '4px' }}>DINE-IN</h4>
-            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Eat at restaurant table</p>
+            <Utensils size={28} style={{ color: orderType === 'dine-in' ? '#10b981' : 'var(--text-muted)' }} />
+            <h4 style={{ fontSize: '1rem', marginTop: '6px', marginBottom: '2px' }}>DINE-IN</h4>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Eat at restaurant table</p>
           </div>
 
           {/* Takeaway Selection Card */}
           <div
             onClick={() => setOrderType('takeaway')}
-            style={{
-              padding: '1.25rem',
-              borderRadius: 'var(--radius-lg)',
-              background: orderType === 'takeaway' ? 'rgba(245, 158, 11, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-              border: orderType === 'takeaway' ? '2px solid #f59e0b' : '1px solid rgba(255, 255, 255, 0.1)',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              textAlign: 'center',
-              position: 'relative'
-            }}
+            className={`order-type-card ${orderType === 'takeaway' ? 'active-takeaway' : ''}`}
           >
             {orderType === 'takeaway' && (
-              <CheckCircle size={18} style={{ position: 'absolute', top: '10px', right: '10px', color: '#f59e0b' }} />
+              <CheckCircle size={18} className="order-type-check-icon" style={{ color: '#f59e0b' }} />
             )}
-            <ShoppingBag size={32} style={{ color: orderType === 'takeaway' ? '#f59e0b' : 'var(--text-muted)', margin: '0 auto 10px' }} />
-            <h4 style={{ fontSize: '1.1rem', marginBottom: '4px' }}>TAKEAWAY</h4>
-            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Pickup order at counter</p>
+            <ShoppingBag size={28} style={{ color: orderType === 'takeaway' ? '#f59e0b' : 'var(--text-muted)' }} />
+            <h4 style={{ fontSize: '1rem', marginTop: '6px', marginBottom: '2px' }}>TAKEAWAY</h4>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Pickup at counter</p>
           </div>
         </div>
 
@@ -155,11 +137,11 @@ export default function OrderTypeModal({
             </>
           )}
 
-          <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-            <button type="button" className="btn btn-secondary" style={{ flex: 1 }} onClick={onClose}>
+          <div className="modal-actions-row">
+            <button type="button" className="btn btn-secondary btn-modal-cancel" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary" style={{ flex: 2 }}>
+            <button type="submit" className="btn btn-primary btn-modal-confirm">
               Confirm Selection
             </button>
           </div>

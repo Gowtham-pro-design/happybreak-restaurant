@@ -90,15 +90,15 @@ export default function MenuSection({ categories, menuItems, onAddToCart, cart }
           flexWrap: 'wrap',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: '1rem',
+          gap: '0.75rem',
           marginBottom: '1.5rem',
           background: 'rgba(19, 27, 46, 0.6)',
-          padding: '1rem 1.25rem',
+          padding: '0.85rem 1rem',
           borderRadius: 'var(--radius-lg)',
           border: 'var(--glass-border)'
         }}
       >
-        <div style={{ position: 'relative', flex: '1', minWidth: '240px' }}>
+        <div style={{ position: 'relative', flex: '1 1 200px', width: '100%' }}>
           <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-subtle)' }} />
           <input
             type="text"
