@@ -4,7 +4,15 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DB_FILE = path.join(__dirname, 'orders_db.json');
+
+// In serverless (Vercel), only /tmp is writable. In local dev, use project directory.
+const isServerless = process.env.VERCEL === '1' || process.env.AWS_LAMBDA_FUNCTION_NAME;
+const DB_FILE = isServerless
+  ? path.join('/tmp', 'orders_db.json')
+  : path.join(__dirname, 'orders_db.json');
+
+// Seed DB file path (read-only, bundled with deployment)
+const SEED_FILE = path.join(__dirname, 'orders_db.json');
 
 // Initial sample seed orders
 const defaultOrders = [
@@ -58,9 +66,15 @@ class OrderStore {
 
   loadOrders() {
     try {
+      // Try reading from the writable DB_FILE first
       if (fs.existsSync(DB_FILE)) {
         const rawData = fs.readFileSync(DB_FILE, 'utf-8');
         this.orders = JSON.parse(rawData);
+      } else if (isServerless && fs.existsSync(SEED_FILE)) {
+        // On first serverless cold start, copy seed data to /tmp
+        const rawData = fs.readFileSync(SEED_FILE, 'utf-8');
+        this.orders = JSON.parse(rawData);
+        this.saveOrders();
       } else {
         this.orders = [...defaultOrders];
         this.saveOrders();
@@ -75,6 +89,7 @@ class OrderStore {
     try {
       fs.writeFileSync(DB_FILE, JSON.stringify(this.orders, null, 2), 'utf-8');
     } catch (err) {
+      // In serverless, /tmp writes can occasionally fail — log but don't crash
       console.error('Error writing order DB file:', err);
     }
   }
