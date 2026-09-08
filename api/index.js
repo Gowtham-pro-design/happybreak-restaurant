@@ -9,12 +9,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// API Routes
+// API Routes - support both with and without /api prefix for Vercel compatibility
 app.use('/api/menu', menuRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/payment', paymentRoutes);
+app.use('/menu', menuRoutes);
 
-app.get('/api/health', (req, res) => {
+app.use('/api/orders', orderRoutes);
+app.use('/orders', orderRoutes);
+
+app.use('/api/payment', paymentRoutes);
+app.use('/payment', paymentRoutes);
+
+app.get(['/api/health', '/health'], (req, res) => {
   res.json({
     status: 'ok',
     app: 'HAPPYBREAK Serverless API',
@@ -22,4 +27,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-export default app;
+export default (req, res) => {
+  return app(req, res);
+};
