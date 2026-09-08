@@ -43,6 +43,7 @@ export default function MenuSection({ categories, menuItems, onAddToCart, cart }
     <section id="menu-section" style={{ marginTop: '1rem' }}>
       {/* Category Tabs */}
       <div
+        className="category-tabs-container"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -59,6 +60,7 @@ export default function MenuSection({ categories, menuItems, onAddToCart, cart }
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
+              className={`category-tab-btn ${isActive ? 'active' : ''}`}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -71,6 +73,7 @@ export default function MenuSection({ categories, menuItems, onAddToCart, cart }
                 whiteSpace: 'nowrap',
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
+                flexShrink: 0,
                 border: isActive ? '1px solid #10b981' : '1px solid rgba(255, 255, 255, 0.1)',
                 background: isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.04)',
                 color: isActive ? '#34d399' : 'var(--text-muted)'
@@ -85,6 +88,7 @@ export default function MenuSection({ categories, menuItems, onAddToCart, cart }
 
       {/* Search & Dietary Filter Bar */}
       <div
+        className="menu-filter-bar"
         style={{
           display: 'flex',
           flexWrap: 'wrap',
@@ -98,7 +102,7 @@ export default function MenuSection({ categories, menuItems, onAddToCart, cart }
           border: 'var(--glass-border)'
         }}
       >
-        <div style={{ position: 'relative', flex: '1 1 200px', width: '100%' }}>
+        <div className="menu-search-wrapper" style={{ position: 'relative', flex: '1 1 200px', width: '100%' }}>
           <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-subtle)' }} />
           <input
             type="text"
@@ -106,11 +110,11 @@ export default function MenuSection({ categories, menuItems, onAddToCart, cart }
             placeholder="Search items, ingredients..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ paddingLeft: '38px' }}
+            style={{ paddingLeft: '38px', width: '100%', boxSizing: 'border-box' }}
           />
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', maxWidth: '100%', paddingBottom: '2px', scrollbarWidth: 'none' }}>
+        <div className="dietary-filter-container" style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', maxWidth: '100%', paddingBottom: '2px', scrollbarWidth: 'none' }}>
           <span style={{ fontSize: '0.8rem', color: 'var(--text-subtle)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap', flexShrink: 0 }}>
             <Filter size={14} /> Dietary:
           </span>
@@ -118,17 +122,18 @@ export default function MenuSection({ categories, menuItems, onAddToCart, cart }
             <button
               key={d}
               onClick={() => setDietaryFilter(d)}
+              className={`dietary-pill-btn ${dietaryFilter === d ? 'active' : ''}`}
               style={{
                 padding: '6px 12px',
                 borderRadius: '9999px',
                 fontSize: '0.78rem',
                 fontWeight: 600,
                 cursor: 'pointer',
+                flexShrink: 0,
                 border: dietaryFilter === d ? '1px solid #10b981' : '1px solid rgba(255, 255, 255, 0.1)',
                 background: dietaryFilter === d ? '#10b981' : 'rgba(255, 255, 255, 0.06)',
                 color: dietaryFilter === d ? '#0b0f19' : 'var(--text-muted)',
                 whiteSpace: 'nowrap',
-                flexShrink: 0,
                 transition: 'all 0.2s ease'
               }}
             >

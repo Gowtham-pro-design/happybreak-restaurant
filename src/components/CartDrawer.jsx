@@ -28,9 +28,9 @@ export default function CartDrawer({
   const total = subtotal + tax;
 
   return (
-    <div className="modal-overlay fade-in" style={{ justifyContent: 'flex-end', padding: 0 }}>
+    <div className="modal-overlay fade-in cart-drawer-overlay" style={{ justifyContent: 'flex-end', padding: 0 }}>
       <div
-        className="glass-card"
+        className="glass-card cart-drawer-panel"
         style={{
           width: '100%',
           maxWidth: '440px',
@@ -40,7 +40,8 @@ export default function CartDrawer({
           flexDirection: 'column',
           padding: '1.5rem',
           background: '#0e1424',
-          borderLeft: '1px solid rgba(255, 255, 255, 0.12)'
+          borderLeft: '1px solid rgba(255, 255, 255, 0.12)',
+          boxSizing: 'border-box'
         }}
       >
         {/* Header */}

@@ -1,9 +1,15 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 /* Global Overflow Prevention */
 html, body {
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
   position: relative;
+  margin: 0;
+  padding: 0;
 }
 
 /* App Layout Containers */
@@ -29,14 +35,14 @@ html, body {
 }
 
 /* ==========================================================================
-   NAVBAR (DESKTOP & MOBILE RESPONSIVE)
+   NAVBAR (DESKTOP DEFAULT)
    ========================================================================== */
 .navbar {
   position: sticky;
   top: 0;
   z-index: 50;
   width: 100%;
-  background: rgba(11, 15, 25, 0.92);
+  background: rgba(11, 15, 25, 0.94);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: var(--glass-border);
@@ -45,19 +51,34 @@ html, body {
 .navbar-inner {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0.75rem 1.25rem;
+  padding: 0.75rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
-.navbar-top-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  gap: 12px;
+@media (min-width: 769px) {
+  .navbar-top-row {
+    display: contents;
+  }
+
+  .brand {
+    order: 1;
+    flex-shrink: 0;
+  }
+
+  .order-mode-container {
+    order: 2;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-actions {
+    order: 3;
+    flex-shrink: 0;
+  }
 }
 
 .brand {
@@ -556,59 +577,132 @@ html, body {
 }
 
 /* ==========================================================================
-   MOBILE & TABLET RESPONSIVE BREAKPOINTS
+   RESPONSIVE BREAKPOINTS (TABLET & MOBILE)
    ========================================================================== */
 
-/* Tablet / Small Laptop (< 900px) */
-@media (max-width: 900px) {
+/* --------------------------------------------------------------------------
+   TABLET (481px to 768px)
+   -------------------------------------------------------------------------- */
+@media (min-width: 481px) and (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+  }
+
   .navbar-inner {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
-    padding: 0.75rem 1rem;
-    gap: 0.6rem;
+    padding: 0.7rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .navbar-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .brand-subtext {
+    display: none;
   }
 
   .order-mode-container {
     width: 100%;
+    display: flex;
     justify-content: center;
   }
 
   .order-mode-pill {
     width: 100%;
-    justify-content: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 14px;
+  }
+
+  .hero-section {
+    padding: 2.25rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .hero-title {
+    font-size: 2.1rem;
+  }
+
+  .food-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .admin-dashboard-container {
+    padding: 1rem 0.75rem;
+  }
+
+  .admin-orders-grid {
+    grid-template-columns: 1fr;
   }
 }
 
-/* Mobile Devices (< 640px) */
-@media (max-width: 640px) {
+/* --------------------------------------------------------------------------
+   MOBILE (max-width: 480px) - Covers 390px, 414px, 430px, 375px, 320px
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
   .main-content {
-    padding: 0.75rem;
+    padding: 0.75rem 0.5rem;
   }
 
+  /* Header Layout */
   .navbar-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     padding: 0.6rem 0.75rem;
-    gap: 0.5rem;
+    gap: 0.45rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .navbar-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    min-width: 0;
   }
 
   .brand-icon {
     width: 34px;
     height: 34px;
+    border-radius: 9px;
   }
 
   .brand-text {
     font-size: 1.15rem;
+    line-height: 1.1;
+    white-space: nowrap;
   }
 
   .brand-subtext {
-    display: none; /* Hide subtitle to preserve header space */
+    display: none; /* Hide subtitle to preserve clean header space */
   }
 
   .nav-actions {
+    display: flex;
+    align-items: center;
     gap: 6px;
+    flex-shrink: 0;
   }
 
   .tracker-text {
-    display: none; /* Icon only on mobile - full order ID visible on hover/title */
+    display: none; /* Icon-only tracker pill on mobile */
   }
 
   .btn-tracker-nav {
@@ -618,51 +712,176 @@ html, body {
   .btn-icon {
     width: 36px;
     height: 36px;
+    border-radius: 9px;
   }
 
   .admin-toggle-btn {
     padding: 7px 10px;
     font-size: 0.78rem;
+    gap: 5px;
+    border-radius: 9px;
   }
 
   .admin-btn-text {
     font-size: 0.75rem;
   }
 
+  /* Order Mode Container on Row 2 */
+  .order-mode-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .order-mode-pill {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 12px;
+    font-size: 0.82rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-sizing: border-box;
+  }
+
+  .order-mode-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.82rem;
+  }
+
+  .order-mode-change-badge {
+    padding: 3px 8px;
+    font-size: 0.72rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+  }
+
+  /* Hero Section */
   .hero-section {
-    padding: 1.75rem 1.15rem;
+    padding: 1.5rem 1rem;
     margin-bottom: 1.5rem;
     border-radius: var(--radius-lg);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .hero-content {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .hero-mode-badge {
+    font-size: 0.78rem;
+    padding: 5px 12px;
+    margin-bottom: 1rem;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .hero-title {
+    font-size: clamp(1.45rem, 5.8vw, 1.85rem);
+    line-height: 1.22;
+    margin-bottom: 0.75rem;
+    word-break: break-word;
   }
 
   .hero-subtitle {
-    font-size: 0.92rem;
+    font-size: 0.88rem;
+    line-height: 1.45;
     margin-bottom: 1.25rem;
   }
 
   .hero-actions {
     flex-direction: column;
     width: 100%;
-    gap: 0.75rem;
+    gap: 0.65rem;
   }
 
   .hero-actions .hero-btn {
     width: 100%;
+    justify-content: center;
+    padding: 11px 16px;
+    font-size: 0.9rem;
+    box-sizing: border-box;
   }
 
+  .hero-features {
+    gap: 0.75rem 1rem;
+    margin-top: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-feature-item {
+    font-size: 0.8rem;
+  }
+
+  /* Category Tabs & Menu Filters */
+  .category-tabs-container {
+    gap: 6px;
+    padding-bottom: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .category-tab-btn {
+    padding: 8px 14px !important;
+    font-size: 0.82rem !important;
+  }
+
+  .menu-filter-bar {
+    padding: 0.75rem !important;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem !important;
+    margin-bottom: 1.25rem;
+  }
+
+  .menu-search-wrapper {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+  }
+
+  .dietary-filter-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  /* Food Grid (1 Column) */
   .food-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
 
+  /* Cart Drawer Panel */
+  .cart-drawer-panel {
+    max-width: 100vw !important;
+    width: 100vw !important;
+    padding: 1.1rem 0.85rem !important;
+  }
+
+  /* Modals */
   .modal-overlay {
     padding: 0.5rem;
   }
 
   .modal-content {
-    padding: 1.25rem 1rem;
+    padding: 1.25rem 0.9rem;
     border-radius: var(--radius-lg);
     max-height: 94vh;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .order-type-cards-grid {
@@ -682,9 +901,56 @@ html, body {
     padding: 9px 14px;
     font-size: 0.85rem;
   }
+}
 
-  .admin-dashboard-container {
-    padding: 0.75rem 0.5rem;
+/* --------------------------------------------------------------------------
+   SMALL MOBILE (max-width: 375px down to 320px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 375px) {
+  .navbar-inner {
+    padding: 0.5rem 0.6rem;
+    gap: 0.4rem;
+  }
+
+  .brand {
+    gap: 6px;
+  }
+
+  .brand-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .brand-text {
+    font-size: 1.05rem;
+  }
+
+  .admin-btn-text {
+    display: none; /* Icon-only on very tight screens so Admin button NEVER overflows */
+  }
+
+  .admin-toggle-btn {
+    padding: 7px 8px;
+    min-width: 34px;
+    justify-content: center;
+  }
+
+  .btn-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .order-mode-pill {
+    font-size: 0.78rem;
+    padding: 6px 10px;
+  }
+
+  .hero-section {
+    padding: 1.25rem 0.85rem;
+  }
+
+  .hero-title {
+    font-size: 1.4rem;
   }
 }
 
@@ -1023,108 +1289,6 @@ html, body {
   color: var(--text-muted);
 }
 
-/* ============================================================
-   SMALL PHONES (< 380px)
-   ============================================================ */
-@media (max-width: 380px) {
-  .brand-text {
-    font-size: 1.05rem;
-  }
-
-  .admin-btn-text {
-    display: none; /* Icon only on very small screens */
-  }
-
-  .admin-toggle-btn {
-    padding: 7px 8px;
-  }
-
-  .admin-header-title {
-    font-size: 1.1rem;
-  }
-
-  .admin-header-subtitle {
-    display: none;
-  }
-
-  .admin-stat-value {
-    font-size: 1.5rem;
-  }
-
-  .admin-orders-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ============================================================
-   MOBILE (< 640px) ADMIN OVERRIDES
-   ============================================================ */
-@media (max-width: 640px) {
-  .admin-dashboard-container {
-    padding: 0.75rem 0.5rem;
-  }
-
-  .admin-header-banner {
-    padding: 1rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .admin-header-title {
-    font-size: 1.15rem;
-  }
-
-  .admin-action-btn span {
-    display: none;
-  }
-
-  .admin-action-btn {
-    padding: 8px 10px;
-  }
-
-  .admin-stats-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .admin-stat-card {
-    padding: 0.9rem 0.75rem;
-  }
-
-  .admin-stat-value {
-    font-size: 1.5rem;
-  }
-
-  .admin-stat-split {
-    flex-direction: column;
-    gap: 4px;
-    font-size: 0.9rem;
-  }
-
-  .admin-filter-toolbar {
-    flex-direction: column;
-    gap: 0.75rem;
-    padding: 0.75rem;
-  }
-
-  .admin-filter-group {
-    width: 100%;
-  }
-
-  .admin-status-group {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .admin-orders-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .admin-order-card {
-    padding: 1rem;
-  }
-}
 
 /* ============================================================
    FLOATING STICKY MOBILE CART BAR (SWIGGY / ZOMATO STYLE)
@@ -1218,8 +1382,8 @@ html, body {
   }
 }
 
-/* Hide floating cart on large desktop screens where cart icon is easily accessible */
-@media (min-width: 901px) {
+/* Hide floating cart on desktop screens (> 768px) where navbar cart is always in view */
+@media (min-width: 769px) {
   .mobile-cart-bottom-bar {
     display: none;
   }
