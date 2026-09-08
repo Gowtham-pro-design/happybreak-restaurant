@@ -21,7 +21,7 @@ export default function App() {
   const [menuItems, setMenuItems] = useState(defaultMenuItems);
 
   const [cart, setCart] = useState([]);
-  const [taxRate, setTaxRate] = useState(0.08875); // US default tax rate 8.875%
+  const [taxRate, setTaxRate] = useState(0.05); // Standard Restaurant GST 5%
 
   const [activeOrder, setActiveOrder] = useState(null);
   const [isAdminView, setIsAdminView] = useState(false);
@@ -70,26 +70,28 @@ export default function App() {
   const handleUpdateQuantity = (itemId, newQty) => {
     if (newQty <= 0) {
       handleRemoveItem(itemId);
-    } else {
-      setCart(prev => prev.map(c => c.id === itemId ? { ...c, quantity: newQty } : c));
+      return;
     }
+    setCart(prev => prev.map(item => item.id === itemId ? { ...item, quantity: newQty } : item));
   };
 
   const handleRemoveItem = (itemId) => {
-    setCart(prev => prev.filter(c => c.id !== itemId));
+    setCart(prev => prev.filter(item => item.id !== itemId));
   };
 
   const handleClearCart = () => {
     setCart([]);
   };
 
-  const handleSaveOrderType = (data) => {
-    setOrderType(data.orderType);
-    if (data.tableNumber) setTableNumber(data.tableNumber);
-    if (data.customerName) setCustomerName(data.customerName);
-    if (data.customerPhone) setCustomerPhone(data.customerPhone);
+  // Order Fulfillment Type
+  const handleSaveOrderType = (config) => {
+    setOrderType(config.orderType);
+    if (config.tableNumber) setTableNumber(config.tableNumber);
+    if (config.customerName) setCustomerName(config.customerName);
+    if (config.customerPhone) setCustomerPhone(config.customerPhone);
   };
 
+  // Checkout & Ordering
   const handleProceedToCheckout = () => {
     setIsCartOpen(false);
     setIsCheckoutOpen(true);
@@ -102,16 +104,14 @@ export default function App() {
     setIsTrackerOpen(true);
   };
 
-  const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-
   return (
     <div className="app-container">
-      {/* Navigation Header */}
+      {/* Top Navigation */}
       <Navbar
         orderType={orderType}
         tableNumber={tableNumber}
         customerName={customerName}
-        cartCount={totalCartCount}
+        cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
         onOpenOrderTypeModal={() => setIsOrderTypeModalOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
         isAdminView={isAdminView}
@@ -120,9 +120,11 @@ export default function App() {
         onOpenTracker={() => setIsTrackerOpen(true)}
       />
 
-      {/* Main View: Admin Dashboard OR Customer Ordering View */}
+      {/* Main View: Customer Ordering or Staff Admin Dashboard */}
       {isAdminView ? (
-        <AdminDashboard onSwitchToCustomer={() => setIsAdminView(false)} />
+        <main className="main-content">
+          <AdminDashboard onSwitchToCustomer={() => setIsAdminView(false)} />
+        </main>
       ) : (
         <main className="main-content">
           <Hero
@@ -141,14 +143,69 @@ export default function App() {
         </main>
       )}
 
+      {/* Mobile Sticky Floating Cart Bar */}
+      {!isAdminView && cart.length > 0 && (
+        <div className="mobile-cart-bottom-bar" onClick={() => setIsCartOpen(true)}>
+          <div className="mobile-cart-info">
+            <div className="mobile-cart-pill-icon">
+              🛒
+            </div>
+            <div>
+              <div className="mobile-cart-items-text">
+                {cart.reduce((s, i) => s + i.quantity, 0)} {cart.reduce((s, i) => s + i.quantity, 0) === 1 ? 'item' : 'items'}
+              </div>
+              <div className="mobile-cart-price-text">
+                ₹{cart.reduce((s, i) => s + i.price * i.quantity, 0).toFixed(2)}
+              </div>
+            </div>
+          </div>
+          <div className="mobile-cart-cta">
+            <span>View Cart</span>
+            <span>→</span>
+          </div>
+        </div>
+      )}
+
       {/* Footer */}
       {!isAdminView && (
         <footer className="footer">
           <div className="footer-content">
-            <div style={{ fontWeight: 800, fontSize: '1.2rem', color: 'white' }}>HAPPYBREAK</div>
-            <div>Fresh & Artisanal Modern US Kitchen • Dine-In & Takeaway Platform</div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--text-subtle)', marginTop: '8px' }}>
-              © {new Date().getFullYear()} HAPPYBREAK Inc. All Rights Reserved. US Sales Tax & Stripe Payments Compliant.
+            <div style={{ fontWeight: 800, fontSize: '1.25rem', color: 'white', letterSpacing: '-0.02em' }}>HAPPYBREAK</div>
+            <div style={{ color: '#34d399', fontSize: '0.85rem', fontWeight: 600, marginTop: '2px' }}>
+              Fresh &amp; Artisanal Kitchen • Dine-In &amp; Takeaway
+            </div>
+
+            <div className="footer-details-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem', margin: '1.75rem 0', textAlign: 'left', width: '100%' }}>
+              <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <div style={{ fontWeight: 700, color: 'white', marginBottom: '6px', fontSize: '0.9rem' }}>📍 Location &amp; Contact</div>
+                <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
+                  42 Artisanal Avenue, Food Street<br />
+                  Bangalore, Karnataka 560001<br />
+                  Phone: +91 98765 43210
+                </div>
+              </div>
+
+              <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <div style={{ fontWeight: 700, color: 'white', marginBottom: '6px', fontSize: '0.9rem' }}>⏰ Service Hours</div>
+                <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
+                  Monday – Sunday: 10:00 AM – 11:00 PM<br />
+                  Kitchen Last Order: 10:30 PM<br />
+                  Dine-In • Counter Pickup
+                </div>
+              </div>
+
+              <div style={{ background: 'rgba(255, 255, 255, 0.03)', padding: '1rem', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+                <div style={{ fontWeight: 700, color: 'white', marginBottom: '6px', fontSize: '0.9rem' }}>💳 Payment Modes</div>
+                <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', lineHeight: '1.5' }}>
+                  Instant UPI (GPay, PhonePe, Paytm)<br />
+                  Visa, Mastercard &amp; RuPay<br />
+                  Pay at Counter Accepted
+                </div>
+              </div>
+            </div>
+
+            <div style={{ fontSize: '0.78rem', color: 'var(--text-subtle)', borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '1rem', width: '100%' }}>
+              © {new Date().getFullYear()} HAPPYBREAK Artisanal Kitchen. All Rights Reserved. Standard 5% GST Included.
             </div>
           </div>
         </footer>

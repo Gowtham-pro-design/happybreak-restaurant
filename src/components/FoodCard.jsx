@@ -67,7 +67,7 @@ export default function FoodCard({ item, onAddToCart, cartItem }) {
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '8px', marginBottom: '6px' }}>
             <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-main)' }}>{item.name}</h3>
             <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#34d399', whiteSpace: 'nowrap' }}>
-              ${item.price.toFixed(2)}
+              ₹{item.price.toFixed(2)}
             </div>
           </div>
 
@@ -122,7 +122,7 @@ export default function FoodCard({ item, onAddToCart, cartItem }) {
               style={{ flex: 1, padding: '10px 14px', fontSize: '0.88rem' }}
             >
               <ShoppingBag size={16} />
-              <span>Add ${ (item.price * qty).toFixed(2) }</span>
+              <span>Add ₹{ (item.price * qty).toFixed(2) }</span>
             </button>
           </div>
 

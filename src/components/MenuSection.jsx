@@ -110,8 +110,8 @@ export default function MenuSection({ categories, menuItems, onAddToCart, cart }
           />
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-subtle)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflowX: 'auto', maxWidth: '100%', paddingBottom: '2px', scrollbarWidth: 'none' }}>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-subtle)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap', flexShrink: 0 }}>
             <Filter size={14} /> Dietary:
           </span>
           {['all', 'Vegetarian', 'Vegan', 'Gluten-Free', 'Chef Special', 'Spicy'].map((d) => (
@@ -119,14 +119,17 @@ export default function MenuSection({ categories, menuItems, onAddToCart, cart }
               key={d}
               onClick={() => setDietaryFilter(d)}
               style={{
-                padding: '4px 10px',
-                borderRadius: '6px',
+                padding: '6px 12px',
+                borderRadius: '9999px',
                 fontSize: '0.78rem',
                 fontWeight: 600,
                 cursor: 'pointer',
-                border: 'none',
-                background: dietaryFilter === d ? 'var(--primary)' : 'rgba(255, 255, 255, 0.08)',
-                color: dietaryFilter === d ? '#0b0f19' : 'var(--text-muted)'
+                border: dietaryFilter === d ? '1px solid #10b981' : '1px solid rgba(255, 255, 255, 0.1)',
+                background: dietaryFilter === d ? '#10b981' : 'rgba(255, 255, 255, 0.06)',
+                color: dietaryFilter === d ? '#0b0f19' : 'var(--text-muted)',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+                transition: 'all 0.2s ease'
               }}
             >
               {d === 'all' ? 'All Items' : d}

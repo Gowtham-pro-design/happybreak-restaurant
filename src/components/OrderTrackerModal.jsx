@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Clock, CheckCircle2, ChefHat, X, RefreshCw, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Clock, CheckCircle2, ChefHat, X, RefreshCw, AlertTriangle, ShieldCheck, Utensils, ShoppingBag } from 'lucide-react';
 
 export default function OrderTrackerModal({ isOpen, onClose, order: initialOrder }) {
   const [order, setOrder] = useState(initialOrder);
@@ -15,11 +15,20 @@ export default function OrderTrackerModal({ isOpen, onClose, order: initialOrder
       try {
         const res = await fetch(`/api/orders/${order.orderId}`);
         const data = await res.json();
-        if (data.success && data.order) setOrder(data.order);
+        if (data.success && data.order) {
+          setOrder(data.order);
+        } else {
+          // Check localStorage as fallback
+          const localOrders = JSON.parse(localStorage.getItem('happybreak_orders') || '[]');
+          const found = localOrders.find(o => o.orderId === order.orderId);
+          if (found) setOrder(found);
+        }
       } catch (err) {
-        console.error('Error polling order:', err);
+        const localOrders = JSON.parse(localStorage.getItem('happybreak_orders') || '[]');
+        const found = localOrders.find(o => o.orderId === order.orderId);
+        if (found) setOrder(found);
       }
-    }, 5000);
+    }, 4000);
     return () => clearInterval(interval);
   }, [isOpen, order?.orderId]);
 
@@ -30,9 +39,17 @@ export default function OrderTrackerModal({ isOpen, onClose, order: initialOrder
     try {
       const res = await fetch(`/api/orders/${order.orderId}`);
       const data = await res.json();
-      if (data.success && data.order) setOrder(data.order);
+      if (data.success && data.order) {
+        setOrder(data.order);
+      } else {
+        const localOrders = JSON.parse(localStorage.getItem('happybreak_orders') || '[]');
+        const found = localOrders.find(o => o.orderId === order.orderId);
+        if (found) setOrder(found);
+      }
     } catch (err) {
-      console.error(err);
+      const localOrders = JSON.parse(localStorage.getItem('happybreak_orders') || '[]');
+      const found = localOrders.find(o => o.orderId === order.orderId);
+      if (found) setOrder(found);
     } finally {
       setIsRefreshing(false);
     }
@@ -54,19 +71,25 @@ export default function OrderTrackerModal({ isOpen, onClose, order: initialOrder
 
   return (
     <div className="modal-overlay fade-in">
-      <div className="modal-content" style={{ maxWidth: '620px' }}>
+      <div className="modal-content" style={{ maxWidth: '600px' }}>
         <div className="modal-header">
           <div>
             <div style={{ fontSize: '0.8rem', color: 'var(--primary)', fontWeight: 700, letterSpacing: '0.05em' }}>
               LIVE ORDER STATUS TRACKER
             </div>
-            <div className="modal-title" style={{ fontSize: '1.5rem', marginTop: '2px' }}>
+            <div className="modal-title" style={{ fontSize: '1.4rem', marginTop: '2px' }}>
               Order #{order.orderId}
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <button onClick={handleManualRefresh} className="btn-icon" title="Refresh Status" style={{ width: '34px', height: '34px' }}>
-              <RefreshCw size={16} />
+            <button
+              onClick={handleManualRefresh}
+              className="btn-icon"
+              title="Refresh Status"
+              style={{ width: '34px', height: '34px' }}
+              disabled={isRefreshing}
+            >
+              <RefreshCw size={16} className={isRefreshing ? 'spin' : ''} />
             </button>
             <button className="close-btn" onClick={onClose}><X size={20} /></button>
           </div>
@@ -84,7 +107,7 @@ export default function OrderTrackerModal({ isOpen, onClose, order: initialOrder
           border: 'var(--glass-border)'
         }}>
           <div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px', textTransform: 'uppercase' }}>Order Status</div>
+            <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '4px', textTransform: 'uppercase' }}>Kitchen Status</div>
             <span className="badge badge-info" style={{ fontSize: '0.85rem', padding: '6px 12px' }}>
               <ChefHat size={14} /> {order.orderStatus}
             </span>
@@ -142,27 +165,34 @@ export default function OrderTrackerModal({ isOpen, onClose, order: initialOrder
         )}
 
         {/* Order Receipt */}
-        <div style={{ background: 'rgba(0, 0, 0, 0.2)', padding: '1.25rem', borderRadius: 'var(--radius-md)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontSize: '0.88rem' }}>
+        <div style={{
+          background: 'rgba(11, 15, 25, 0.6)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
+          borderRadius: 'var(--radius-md)',
+          padding: '1.25rem',
+          marginBottom: '1.5rem'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', fontSize: '0.88rem', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', paddingBottom: '0.75rem' }}>
             <span>Type: <strong>{order.orderType === 'dine-in' ? `Dine-In Table #${order.tableNumber}` : `Takeaway`}</strong></span>
             <span>Customer: <strong>{order.customerName}</strong></span>
           </div>
-          <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', paddingTop: '10px', marginTop: '10px' }}>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '6px' }}>Ordered Items:</div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {order.items.map((item, idx) => (
-              <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
-                <span>{item.quantity}× {item.name}</span>
-                <span>${(item.price * item.quantity).toFixed(2)}</span>
+              <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem' }}>
+                <span style={{ color: 'var(--text-main)' }}>{item.quantity}× {item.name}</span>
+                <span style={{ color: 'var(--text-muted)' }}>₹{(item.price * item.quantity).toFixed(2)}</span>
               </div>
             ))}
           </div>
-          <div style={{ borderTop: '1px dashed rgba(255, 255, 255, 0.1)', marginTop: '10px', paddingTop: '10px', display: 'flex', justifyContent: 'space-between', fontWeight: 800, color: 'white' }}>
-            <span>Total Billed:</span>
-            <span style={{ color: '#34d399' }}>${order.total.toFixed(2)}</span>
+
+          <div style={{ borderTop: '1px dashed rgba(255, 255, 255, 0.12)', marginTop: '1rem', paddingTop: '0.75rem', display: 'flex', justifyContent: 'space-between', fontWeight: 800, fontSize: '1.1rem' }}>
+            <span>Total Paid / Due:</span>
+            <span style={{ color: '#34d399' }}>₹{order.total.toFixed(2)}</span>
           </div>
         </div>
 
-        <button className="btn btn-secondary btn-full" onClick={onClose} style={{ marginTop: '1.5rem' }}>
+        <button className="btn btn-secondary btn-full" onClick={onClose}>
           Close Tracker
         </button>
       </div>

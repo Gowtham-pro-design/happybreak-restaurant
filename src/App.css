@@ -1126,3 +1126,103 @@ html, body {
   }
 }
 
+/* ============================================================
+   FLOATING STICKY MOBILE CART BAR (SWIGGY / ZOMATO STYLE)
+   ============================================================ */
+.mobile-cart-bottom-bar {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 24px);
+  max-width: 520px;
+  z-index: 45;
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: white;
+  border-radius: 14px;
+  padding: 11px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 10px 25px -3px rgba(16, 185, 129, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: slideUpFloat 0.35s ease forwards;
+  box-sizing: border-box;
+}
+
+.mobile-cart-bottom-bar:hover {
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 14px 30px -3px rgba(16, 185, 129, 0.65);
+}
+
+.mobile-cart-bottom-bar:active {
+  transform: translateX(-50%) scale(0.98);
+}
+
+.mobile-cart-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-cart-pill-icon {
+  font-size: 1.25rem;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mobile-cart-items-text {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.mobile-cart-price-text {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin-top: 2px;
+  line-height: 1.1;
+}
+
+.mobile-cart-cta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 8px 14px;
+  border-radius: 10px;
+  letter-spacing: 0.01em;
+}
+
+@keyframes slideUpFloat {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Hide floating cart on large desktop screens where cart icon is easily accessible */
+@media (min-width: 901px) {
+  .mobile-cart-bottom-bar {
+    display: none;
+  }
+}
+
+
